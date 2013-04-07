@@ -21,6 +21,7 @@ public class UDPClient {
 		Date end = new Date();
 		sendingData = msg.getBytes();
 		DatagramPacket sendPacket = new DatagramPacket(sendingData, sendingData.length, serverAddress, port);
+		clientSocket = new DatagramSocket();
 		clientSocket.send(sendPacket);
 		System.out.println("Client sent a request to " + serverAddress.toString() + " port " + port + " msg " + msg);
 
@@ -49,7 +50,7 @@ public class UDPClient {
 	public static void main(String[] args) throws UnknownHostException, IOException {
 		// TODO Auto-generated method stub
 		UDPClient client = new UDPClient();
-		client.SendMsg(InetAddress.getByName("125.22.22.6"), 6789, "test_request");
+		client.SendMsg(InetAddress.getByName("125.22.22.6"), 6789, new String("test_request"));
 		client.CalculateResult();
 	}
 

@@ -23,9 +23,9 @@ public class UDPServer {
 			String data = new String(receivedPacket.getData());
 			clientAddress = receivedPacket.getAddress();
 			sendingPort = receivedPacket.getPort();
-			if (data.equals("test_request")){	//reply the client's request.
+			//if (data.equals("request")){	//reply the client's request.
 				StartReply();
-			}
+			//}
 		}
 	}
 

@@ -31,8 +31,8 @@ public class UDPClient {
 		while ( (end.getTime()-start.getTime())/1000 < experimentTime ){
 			clientSocket.receive(receivedPacket);
 			//Something received from the server
-			System.out.println("Client: " + receivedData.toString());
-			received.add(new T_Packet(Integer.parseInt(receivedData.toString())));
+			System.out.println("Client: " + new String (receivedPacket.getData()));
+			received.add(new T_Packet(Integer.parseInt(new String (receivedPacket.getData()))));
 			end = new Date();
 		}
 		System.out.println("Experiment ended");
@@ -50,7 +50,7 @@ public class UDPClient {
 	public static void main(String[] args) throws UnknownHostException, IOException {
 		// TODO Auto-generated method stub
 		UDPClient client = new UDPClient();
-		client.SendMsg(InetAddress.getByName("125.22.22.6"), 6789, new String("test_request"));
+		client.SendMsg(InetAddress.getByName("155.98.65.57"), 6789, new String("test_request"));
 		client.CalculateResult();
 	}
 

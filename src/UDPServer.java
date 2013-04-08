@@ -12,7 +12,7 @@ public class UDPServer {
 	private DatagramSocket serverSocket;
 	private int seq = 0;	/*sequence number of sending UDP packet*/ 
 	
-	public void Listen(int port) throws IOException{
+	public void Listen(int port) throws IOException, InterruptedException{
 		serverSocket = new DatagramSocket(port);
 		System.out.println("Server is listenning on port " + port);
 		while (true){
@@ -30,7 +30,7 @@ public class UDPServer {
 	}
 
 			
-	private void StartReply() throws IOException{
+	private void StartReply() throws IOException, InterruptedException{
 		seq = 0;	/*reset the seq number*/
 		DatagramPacket sendPacket;
 		System.out.println("Server stats replying ....");
@@ -40,6 +40,7 @@ public class UDPServer {
 			serverSocket.send(sendPacket);
 			System.out.println("Server: " +seq);
 			seq++;
+			Thread.sleep(1);
 		}
 	}
 	/**

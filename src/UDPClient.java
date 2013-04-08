@@ -13,7 +13,7 @@ public class UDPClient {
 	private byte[] sendingData = new byte[1000];
 	private byte[] receivedData = new byte[1000];
 	private ArrayList<T_Packet> received = new ArrayList<T_Packet>();
-	private int experimentTime = 1; /*experiment duration in seconds*/ 
+	private static int experimentTime = 1; /*experiment duration in seconds*/ 
 	
 	
 	private void SendMsg(InetAddress serverAddress, int port, String msg) throws IOException{
@@ -46,8 +46,7 @@ public class UDPClient {
 		int r = 0;
 		ArrayList<Integer> lostCount = new ArrayList<Integer>();
 		for (int i = 0; i < received.size(); ++i){
-			String z = 	StringCut(received.get(i).seq);
-			r = Integer.parseInt(z);
+			r = Integer.parseInt(StringCut(received.get(i).seq));
 			System.out.println("r/cs = "+ r+" "+cs);
 			if (cs != r ){ //loss occurs
 				lostCount.add(r-cs);	/*number of lost pkts added into lostCount list*/
@@ -65,7 +64,7 @@ public class UDPClient {
 	private String StringCut(String str){	/*return only integer inside a 1000-byte string*/
 		int i = 0;
 		for (i = 0; i < str.length(); ++i){
-			if (str.charAt(i) < '0' || str.charAt(i) > '9'){
+			if (str.charAt(i) < '0'){
 				break;
 			}
 		}
@@ -80,7 +79,7 @@ public class UDPClient {
 	public static void main(String[] args) throws UnknownHostException, IOException {
 		// TODO Auto-generated method stub
 		UDPClient client = new UDPClient();
-		client.SendMsg(InetAddress.getByName("155.98.65.57"), 6789, new String("test_request"));
+		client.SendMsg(InetAddress.getByName("155.98.65.57"), 6789, new String(Integer.toString(experimentTime)));
 		client.CalculateResult();
 	}
 

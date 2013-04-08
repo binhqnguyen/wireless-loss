@@ -13,7 +13,7 @@ public class UDPClient {
 	private byte[] sendingData = new byte[1000];
 	private byte[] receivedData = new byte[1000];
 	private ArrayList<T_Packet> received = new ArrayList<T_Packet>();
-	private int experimentTime = 30; /*experiment duration in seconds*/ 
+	private int experimentTime = 1; /*experiment duration in seconds*/ 
 	
 	
 	private void SendMsg(InetAddress serverAddress, int port, String msg) throws IOException{
@@ -28,18 +28,48 @@ public class UDPClient {
 		/*client starts listening*/
 		DatagramPacket receivedPacket = new DatagramPacket(receivedData, receivedData.length);
 		start = new Date();	/*get current time*/
+		String receivedString = "-1";
 		while ( (end.getTime()-start.getTime())/1000 < experimentTime ){
 			clientSocket.receive(receivedPacket);
 			//Something received from the server
-			System.out.println("Client: " + new String (receivedPacket.getData()));
-			received.add(new T_Packet(Integer.parseInt(new String (receivedPacket.getData()))));
+			receivedString = new String (receivedPacket.getData());
+			System.out.println("Client: " + receivedString);
+			received.add(new T_Packet(receivedString));
 			end = new Date();
 		}
 		System.out.println("Experiment ended");
 	}
 	
 	private void CalculateResult(){
+		System.out.println("Received:");
+		int cs = 0;
+		int r = 0;
+		ArrayList<Integer> lostCount = new ArrayList<Integer>();
+		for (int i = 0; i < received.size(); ++i){
+			String z = 	StringCut(received.get(i).seq);
+			r = Integer.parseInt(z);
+			System.out.println("r/cs = "+ r+" "+cs);
+			if (cs != r ){ //loss occurs
+				lostCount.add(r-cs);	/*number of lost pkts added into lostCount list*/
+				cs = r;
+			}
+			cs++;
+		}
 		
+		System.out.println("Lost:");
+		for (int i = 0; i < lostCount.size(); ++i){
+			System.out.println(lostCount.get(i));
+		}
+	}
+	
+	private String StringCut(String str){	/*return only integer inside a 1000-byte string*/
+		int i = 0;
+		for (i = 0; i < str.length(); ++i){
+			if (str.charAt(i) < '0' || str.charAt(i) > '9'){
+				break;
+			}
+		}
+		return str.substring(0, i);
 	}
 	
 	/**

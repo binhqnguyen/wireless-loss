@@ -23,9 +23,10 @@ public class UDPServer {
 			String data = new String(receivedPacket.getData());
 			clientAddress = receivedPacket.getAddress();
 			sendingPort = receivedPacket.getPort();
-			//if (data.equals("request")){	//reply the client's request.
+			
+			if (data.equals(StringCut("request"))){	//reply the client's request.
 				StartReply();
-			//}
+			}
 		}
 	}
 
@@ -43,11 +44,22 @@ public class UDPServer {
 			Thread.sleep(1);
 		}
 	}
+	
+	private String StringCut(String str){	/*return only integer inside a 1000-byte string*/
+		int i = 0;
+		for (i = 0; i < str.length(); ++i){
+			if (str.charAt(i) < '0' || str.charAt(i) > '9'){
+				break;
+			}
+		}
+		return str.substring(0, i);
+	}
 	/**
 	 * @param args
 	 * @throws IOException 
+	 * @throws InterruptedException 
 	 */
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, InterruptedException {
 		// TODO Auto-generated method stub
 		UDPServer server = new UDPServer();
 		server.Listen(6789);
